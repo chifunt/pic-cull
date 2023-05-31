@@ -3,6 +3,8 @@ from PIL import ImageTk, Image
 from tkinter import filedialog
 import os
 import shutil
+import subprocess
+import platform
 
 class PicCull:
     def __init__(self, master):
@@ -17,6 +19,7 @@ class PicCull:
         self.img_label.pack()
 
         Button(master, text="Load Directory", command=self.open_directory).pack()
+        Button(master, text="Open Culled Folder", command=self.open_culled_folder).pack()
 
         frame = Frame(master)
         frame.pack()
@@ -41,6 +44,15 @@ class PicCull:
             self.image_paths = list(filter(lambda f: f.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif')), os.listdir(directory_path)))
             self.image_paths = [os.path.join(directory_path, f) for f in self.image_paths]
             self.show_image()
+
+    def open_culled_folder(self):
+        if self.culled_dir:
+            if platform.system() == "Windows":
+                os.startfile(self.culled_dir)
+            elif platform.system() == "Darwin":
+                subprocess.Popen(["open", self.culled_dir])
+            else:
+                subprocess.Popen(["xdg-open", self.culled_dir])
 
     def show_image(self):
         if self.index < len(self.image_paths):
