@@ -6,7 +6,7 @@ import os
 class ImagePreviewer:
     def __init__(self, master):
         self.master = master
-        self.master.title('Image Previewer')
+        self.master.title('PicCull')
         
         self.index = 0
         self.image_paths = []
