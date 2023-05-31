@@ -16,7 +16,7 @@ class PicCull:
         self.img_label = Label(master)
         self.img_label.pack()
 
-        Button(master, text="Open Directory", command=self.open_directory).pack()
+        Button(master, text="Load Directory", command=self.open_directory).pack()
 
         frame = Frame(master)
         frame.pack()
