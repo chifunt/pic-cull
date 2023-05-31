@@ -75,5 +75,5 @@ class PicCull:
             self.show_image()
 
 root = Tk()
-app = ImagePreviewer(root)
+app = PicCull(root)
 root.mainloop()
