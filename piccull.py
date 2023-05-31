@@ -24,6 +24,11 @@ class ImagePreviewer:
         Button(frame, text="Next ->", command=self.next_image).grid(row=0, column=2)
         Button(frame, text="Skip", command=self.skip_image).grid(row=0, column=3)
 
+        self.master.bind('<Left>', lambda e: self.prev_image())
+        self.master.bind('<Right>', lambda e: self.next_image())
+        self.master.bind('<Up>', lambda e: self.skip_image())
+        self.master.bind('<Down>', lambda e: self.delete_image())
+
     def open_directory(self):
         self.index = 0
         directory_path = filedialog.askdirectory(initialdir="/", title="Select a Directory")
