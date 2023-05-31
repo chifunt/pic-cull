@@ -1,10 +1,10 @@
 from tkinter import *
-from PIL import ImageTk, Image
 from tkinter import filedialog
 import os
 import shutil
 import subprocess
 import platform
+from PIL import ImageTk, Image
 
 class PicCull:
     def __init__(self, master):
