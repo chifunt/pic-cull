@@ -1,5 +1,4 @@
-from tkinter import *
-from tkinter import filedialog
+from tkinter import Tk, Button, Frame, Label, filedialog
 import os
 import shutil
 import subprocess
