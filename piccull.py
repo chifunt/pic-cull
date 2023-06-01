@@ -1,4 +1,4 @@
-from tkinter import Tk, Button, Frame, Label, filedialog
+from tkinter import Tk, Button, Frame, Label, filedialog, StringVar
 import os
 import shutil
 import subprocess
@@ -33,16 +33,34 @@ class PicCull:
         self.master.bind('<Up>', lambda e: self.skip_image())
         self.master.bind('<Down>', lambda e: self.cull_image())
 
+        # Status Bar
+        self.status_var = StringVar()
+        self.status_bar = Label(master, textvariable=self.status_var, bd=1, relief='sunken', anchor='w')
+        self.status_bar.pack(side='bottom', fill='x')
+
     def open_directory(self):
         self.index = 0
         directory_path = filedialog.askdirectory(initialdir="/", title="Select a Directory")
-        if directory_path:
-            self.culled_dir = os.path.join(directory_path, 'pic-culled')
-            if not os.path.exists(self.culled_dir):
-                os.makedirs(self.culled_dir)
-            self.image_paths = list(filter(lambda f: f.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif')), os.listdir(directory_path)))
-            self.image_paths = [os.path.join(directory_path, f) for f in self.image_paths]
-            self.show_image()
+
+        # Check if a directory was selected
+        if not directory_path:
+            self.status_var.set("No directory selected.")
+            return
+
+        self.culled_dir = os.path.join(directory_path, 'pic-culled')
+        if not os.path.exists(self.culled_dir):
+            os.makedirs(self.culled_dir)
+        
+        self.image_paths = list(filter(lambda f: f.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif')), os.listdir(directory_path)))
+        self.image_paths = [os.path.join(directory_path, f) for f in self.image_paths]
+
+        # Check if any images were found in the directory
+        if not self.image_paths:
+            self.status_var.set("No images found in the selected directory.")
+            return
+
+        self.status_var.set(f"Loaded directory: {directory_path}")
+        self.show_image()
 
     def open_culled_folder(self):
         if self.culled_dir:
@@ -56,7 +74,13 @@ class PicCull:
     def show_image(self):
         if self.index < len(self.image_paths):
             img_path = self.image_paths[self.index]
-            img = Image.open(img_path)
+            
+            try:
+                img = Image.open(img_path)
+            except IOError:
+                self.status_var.set(f"Unable to open image at {img_path}. It might be corrupted.")
+                return
+
             img.thumbnail((800, 600))
             photo = ImageTk.PhotoImage(img)
             self.img_label.configure(image=photo)
@@ -64,6 +88,7 @@ class PicCull:
         else:
             self.img_label.configure(image=None)
             self.img_label.image = None
+            self.status_var.set("No more images in the directory.")
 
     def cull_image(self):
         if self.index < len(self.image_paths):
