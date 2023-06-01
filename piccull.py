@@ -12,6 +12,7 @@ class PicCull:
         
         self.index = 0
         self.image_paths = []
+        self.directory_path = ""
         self.culled_dir = None
 
         self.img_label = Label(master)
@@ -40,24 +41,22 @@ class PicCull:
 
     def open_directory(self):
         self.index = 0
-        directory_path = filedialog.askdirectory(initialdir="/", title="Select a Directory")
+        self.directory_path = filedialog.askdirectory(initialdir="/", title="Select a Directory")
 
-        # Check if a directory was selected
-        if not directory_path:
+        if not self.directory_path:
             self.status_var.set("No directory selected.")
             return
 
-        self.culled_dir = os.path.join(directory_path, 'pic-culled')
+        self.culled_dir = os.path.join(self.directory_path, 'pic-culled')
         
-        self.image_paths = list(filter(lambda f: f.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif')), os.listdir(directory_path)))
-        self.image_paths = [os.path.join(directory_path, f) for f in self.image_paths]
+        self.image_paths = list(filter(lambda f: f.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif')), os.listdir(self.directory_path)))
+        self.image_paths = [os.path.join(self.directory_path, f) for f in self.image_paths]
 
-        # Check if any images were found in the directory
         if not self.image_paths:
             self.status_var.set("No images found in the selected directory.")
             return
 
-        self.status_var.set(f"Loaded directory: {directory_path}")
+        self.status_var.set(f"Loaded directory: {self.directory_path}. Image {self.index+1}/{len(self.image_paths)}")
         self.show_image()
 
     def open_culled_folder(self):
@@ -85,6 +84,7 @@ class PicCull:
             photo = ImageTk.PhotoImage(img)
             self.img_label.configure(image=photo)
             self.img_label.image = photo
+            self.status_var.set(f"Directory: {self.directory_path}. Image {self.index+1}/{len(self.image_paths)}")
         else:
             self.img_label.configure(image=None)
             self.img_label.image = None
