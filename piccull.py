@@ -48,8 +48,6 @@ class PicCull:
             return
 
         self.culled_dir = os.path.join(directory_path, 'pic-culled')
-        if not os.path.exists(self.culled_dir):
-            os.makedirs(self.culled_dir)
         
         self.image_paths = list(filter(lambda f: f.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif')), os.listdir(directory_path)))
         self.image_paths = [os.path.join(directory_path, f) for f in self.image_paths]
@@ -63,13 +61,15 @@ class PicCull:
         self.show_image()
 
     def open_culled_folder(self):
-        if self.culled_dir:
+        if self.culled_dir and os.path.exists(self.culled_dir):
             if platform.system() == "Windows":
                 os.startfile(self.culled_dir)
             elif platform.system() == "Darwin":
                 subprocess.Popen(["open", self.culled_dir])
             else:
                 subprocess.Popen(["xdg-open", self.culled_dir])
+        else:
+            self.status_var.set("No culled directory exists.")
 
     def show_image(self):
         if self.index < len(self.image_paths):
@@ -92,6 +92,9 @@ class PicCull:
 
     def cull_image(self):
         if self.index < len(self.image_paths):
+            if not os.path.exists(self.culled_dir):
+                os.makedirs(self.culled_dir)
+
             shutil.move(self.image_paths[self.index], self.culled_dir)
             del self.image_paths[self.index]
             self.show_image()
