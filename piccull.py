@@ -1,4 +1,4 @@
-from tkinter import Tk, Button, Frame, Label, filedialog, StringVar
+from tkinter import Tk, Button, Frame, Label, filedialog, StringVar, DISABLED, NORMAL
 import os
 import shutil
 import subprocess
@@ -24,16 +24,16 @@ class PicCull:
         frame = Frame(master)
         frame.pack()
 
-        self.btn_cull = Button(frame, text="Cull", command=self.cull_image)
+        self.btn_cull = Button(frame, text="Cull", command=self.cull_image, state=DISABLED)
         self.btn_cull.grid(row=0, column=0)
 
-        self.btn_prev = Button(frame, text="<- Prev", command=self.prev_image)
+        self.btn_prev = Button(frame, text="<- Prev", command=self.prev_image, state=DISABLED)
         self.btn_prev.grid(row=0, column=1)
 
-        self.btn_next = Button(frame, text="Next ->", command=self.next_image)
+        self.btn_next = Button(frame, text="Next ->", command=self.next_image, state=DISABLED)
         self.btn_next.grid(row=0, column=2)
 
-        self.btn_skip = Button(frame, text="Skip", command=self.skip_image)
+        self.btn_skip = Button(frame, text="Skip", command=self.skip_image, state=DISABLED)
         self.btn_skip.grid(row=0, column=3)
 
         self.master.bind('<Left>', lambda e: self.prev_image())
@@ -52,7 +52,6 @@ class PicCull:
 
         if not self.directory_path:
             self.status_var.set("No directory selected.")
-            self.update_button_states()
             return
 
         self.culled_dir = os.path.join(self.directory_path, 'pic-culled')
@@ -62,11 +61,9 @@ class PicCull:
 
         if not self.image_paths:
             self.status_var.set("No images found in the selected directory.")
-            self.update_button_states()
             return
 
         self.status_var.set(f"Loaded directory: {self.directory_path}. Image {self.index+1}/{len(self.image_paths)}")
-        self.update_button_states()
         self.show_image()
 
     def open_culled_folder(self):
