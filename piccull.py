@@ -1,4 +1,4 @@
-from tkinter import Tk, Button, Frame, Label, filedialog, StringVar, DISABLED, NORMAL
+from tkinter import Tk, Button, Frame, Label, filedialog, StringVar, DISABLED
 import os
 import shutil
 import subprocess
