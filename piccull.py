@@ -24,10 +24,17 @@ class PicCull:
         frame = Frame(master)
         frame.pack()
 
-        Button(frame, text="Cull", command=self.cull_image).grid(row=0, column=0)
-        Button(frame, text="<- Prev", command=self.prev_image).grid(row=0, column=1)
-        Button(frame, text="Next ->", command=self.next_image).grid(row=0, column=2)
-        Button(frame, text="Skip", command=self.skip_image).grid(row=0, column=3)
+        self.btn_cull = Button(frame, text="Cull", command=self.cull_image)
+        self.btn_cull.grid(row=0, column=0)
+
+        self.btn_prev = Button(frame, text="<- Prev", command=self.prev_image)
+        self.btn_prev.grid(row=0, column=1)
+
+        self.btn_next = Button(frame, text="Next ->", command=self.next_image)
+        self.btn_next.grid(row=0, column=2)
+
+        self.btn_skip = Button(frame, text="Skip", command=self.skip_image)
+        self.btn_skip.grid(row=0, column=3)
 
         self.master.bind('<Left>', lambda e: self.prev_image())
         self.master.bind('<Right>', lambda e: self.next_image())
@@ -45,6 +52,7 @@ class PicCull:
 
         if not self.directory_path:
             self.status_var.set("No directory selected.")
+            self.update_button_states()
             return
 
         self.culled_dir = os.path.join(self.directory_path, 'pic-culled')
@@ -54,9 +62,11 @@ class PicCull:
 
         if not self.image_paths:
             self.status_var.set("No images found in the selected directory.")
+            self.update_button_states()
             return
 
         self.status_var.set(f"Loaded directory: {self.directory_path}. Image {self.index+1}/{len(self.image_paths)}")
+        self.update_button_states()
         self.show_image()
 
     def open_culled_folder(self):
@@ -78,6 +88,7 @@ class PicCull:
                 img = Image.open(img_path)
             except IOError:
                 self.status_var.set(f"Unable to open image at {img_path}. It might be corrupted.")
+                self.update_button_states()
                 return
 
             img.thumbnail((800, 600))
@@ -89,6 +100,7 @@ class PicCull:
             self.img_label.configure(image=None)
             self.img_label.image = None
             self.status_var.set("No more images in the directory.")
+        self.update_button_states()
 
     def cull_image(self):
         if self.index < len(self.image_paths):
@@ -97,21 +109,43 @@ class PicCull:
 
             shutil.move(self.image_paths[self.index], self.culled_dir)
             del self.image_paths[self.index]
+            self.update_button_states()
             self.show_image()
 
     def skip_image(self):
         self.index += 1
+        self.update_button_states()
         self.show_image()
 
     def prev_image(self):
         if self.index > 0:
             self.index -= 1
+            self.update_button_states()
             self.show_image()
 
     def next_image(self):
         if self.index < len(self.image_paths) - 1:
             self.index += 1
+            self.update_button_states()
             self.show_image()
+
+    def update_button_states(self):
+        if self.index <= 0:
+            self.btn_prev.config(state='disabled')
+        else:
+            self.btn_prev.config(state='normal')
+    
+        if self.index >= len(self.image_paths) - 1:
+            self.btn_next.config(state='disabled')
+            self.btn_skip.config(state='disabled')
+        else:
+            self.btn_next.config(state='normal')
+            self.btn_skip.config(state='normal')
+    
+        if len(self.image_paths) == 0:
+            self.btn_cull.config(state='disabled')
+        else:
+            self.btn_cull.config(state='normal')
 
 root = Tk()
 app = PicCull(root)
