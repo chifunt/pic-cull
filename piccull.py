@@ -1,9 +1,9 @@
 from tkinter import Tk, Button, Frame, Label, filedialog, StringVar
-from PIL import ImageTk, Image
 import os
 import shutil
 import subprocess
 import platform
+from PIL import ImageTk, Image
 
 class PicCull:
     def __init__(self, master):
