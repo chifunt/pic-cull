@@ -9,7 +9,7 @@ class PicCull:
     def __init__(self, master):
         self.master = master
         self.master.title('PicCull')
-        
+
         self.index = 0
         self.image_paths = []
         self.directory_path = ""
@@ -51,7 +51,7 @@ class PicCull:
             return
 
         self.culled_dir = os.path.join(self.directory_path, 'pic-culled')
-        
+
         self.image_paths = list(filter(lambda f: f.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif')), os.listdir(self.directory_path)))
         self.image_paths = [os.path.join(self.directory_path, f) for f in self.image_paths]
 
@@ -76,7 +76,7 @@ class PicCull:
     def show_image(self):
         if self.index < len(self.image_paths):
             img_path = self.image_paths[self.index]
-            
+
             try:
                 img = Image.open(img_path)
             except IOError:
@@ -122,12 +122,12 @@ class PicCull:
             self.btn_prev.config(state='disabled')
         else:
             self.btn_prev.config(state='normal')
-    
+
         if self.index >= len(self.image_paths) - 1:
             self.btn_next.config(state='disabled')
         else:
             self.btn_next.config(state='normal')
-    
+
         if len(self.image_paths) == 0:
             self.btn_cull.config(state='disabled')
         else:
