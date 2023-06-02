@@ -24,21 +24,17 @@ class PicCull:
         frame = Frame(master)
         frame.pack()
 
-        self.btn_cull = Button(frame, text="Cull", command=self.cull_image, state=DISABLED)
-        self.btn_cull.grid(row=0, column=0)
-
         self.btn_prev = Button(frame, text="<- Prev", command=self.prev_image, state=DISABLED)
-        self.btn_prev.grid(row=0, column=1)
+        self.btn_prev.grid(row=0, column=0)
+
+        self.btn_cull = Button(frame, text="Cull", command=self.cull_image, state=DISABLED)
+        self.btn_cull.grid(row=0, column=1)
 
         self.btn_next = Button(frame, text="Next ->", command=self.next_image, state=DISABLED)
         self.btn_next.grid(row=0, column=2)
 
-        self.btn_skip = Button(frame, text="Skip", command=self.skip_image, state=DISABLED)
-        self.btn_skip.grid(row=0, column=3)
-
         self.master.bind('<Left>', lambda e: self.prev_image())
         self.master.bind('<Right>', lambda e: self.next_image())
-        self.master.bind('<Up>', lambda e: self.skip_image())
         self.master.bind('<Down>', lambda e: self.cull_image())
 
         # Status Bar
@@ -109,11 +105,6 @@ class PicCull:
             self.update_button_states()
             self.show_image()
 
-    def skip_image(self):
-        self.index += 1
-        self.update_button_states()
-        self.show_image()
-
     def prev_image(self):
         if self.index > 0:
             self.index -= 1
@@ -134,10 +125,8 @@ class PicCull:
     
         if self.index >= len(self.image_paths) - 1:
             self.btn_next.config(state='disabled')
-            self.btn_skip.config(state='disabled')
         else:
             self.btn_next.config(state='normal')
-            self.btn_skip.config(state='normal')
     
         if len(self.image_paths) == 0:
             self.btn_cull.config(state='disabled')
