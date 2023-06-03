@@ -1,4 +1,4 @@
-from tkinter import Tk, Button, Frame, Label, filedialog, StringVar, DISABLED
+from tkinter import Tk, Button, Frame, Label, Checkbutton, filedialog, StringVar, IntVar, DISABLED, Toplevel
 import os
 import shutil
 import subprocess
@@ -14,6 +14,7 @@ class PicCull:
         self.image_paths = []
         self.directory_path = ""
         self.culled_dir = None
+        self.delete_on_cull = IntVar()
 
         self.img_label = Label(master)
         self.img_label.pack()
@@ -34,6 +35,8 @@ class PicCull:
 
         self.btn_next = Button(frame, text="Next ->", command=self.next_image, state=DISABLED)
         self.btn_next.grid(row=0, column=2)
+
+        Button(master, text="Settings", command=self.open_settings).pack()
 
         self.master.bind('<Left>', lambda e: self.prev_image())
         self.master.bind('<Right>', lambda e: self.next_image())
@@ -76,6 +79,11 @@ class PicCull:
         else:
             self.status_var.set("No culled directory exists.")
 
+    def open_settings(self):
+        settings_window = Toplevel(self.master)
+        settings_window.title("Settings")
+        Checkbutton(settings_window, text="Delete on cull", variable=self.delete_on_cull).pack()
+
     def show_image(self):
         if self.index < len(self.image_paths):
             img_path = self.image_paths[self.index]
@@ -103,7 +111,11 @@ class PicCull:
             if not os.path.exists(self.culled_dir):
                 os.makedirs(self.culled_dir)
 
-            shutil.move(self.image_paths[self.index], self.culled_dir)
+            if self.delete_on_cull.get():
+                os.remove(self.image_paths[self.index])
+            else:
+                shutil.move(self.image_paths[self.index], self.culled_dir)
+
             del self.image_paths[self.index]
             self.update_button_states()
             self.btn_open_culled.config(state='normal')  # The culled folder should now exist.
