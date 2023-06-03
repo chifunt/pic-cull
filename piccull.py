@@ -19,10 +19,15 @@ class PicCull:
         self.img_label = Label(master)
         self.img_label.pack()
 
-        Button(master, text="Load Directory", command=self.open_directory).pack()
+        button_frame = Frame(master)
+        button_frame.pack()
 
-        self.btn_open_culled = Button(master, text="Open Culled Folder", command=self.open_culled_folder, state=DISABLED)
-        self.btn_open_culled.pack()
+        Button(button_frame, text="Load Directory", command=self.open_directory).grid(row=0, column=0)
+
+        self.btn_open_culled = Button(button_frame, text="Open Culled Folder", command=self.open_culled_folder, state=DISABLED)
+        self.btn_open_culled.grid(row=0, column=1)
+
+        Button(button_frame, text="Settings", command=self.open_settings).grid(row=0, column=2)
 
         frame = Frame(master)
         frame.pack()
@@ -35,8 +40,6 @@ class PicCull:
 
         self.btn_next = Button(frame, text="Next ->", command=self.next_image, state=DISABLED)
         self.btn_next.grid(row=0, column=2)
-
-        Button(master, text="Settings", command=self.open_settings).pack()
 
         self.master.bind('<Left>', lambda e: self.prev_image())
         self.master.bind('<Right>', lambda e: self.next_image())
