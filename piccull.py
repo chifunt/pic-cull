@@ -9,38 +9,27 @@ class PicCull:
     def __init__(self, master):
         self.master = master
         self.master.title('PicCull')
-        self.setup_vars()
-        self.setup_ui()
 
-    def setup_vars(self):
         self.index = 0
         self.image_paths = []
         self.directory_path = ""
         self.culled_dir = None
         self.delete_on_cull = IntVar()
 
-    def setup_ui(self):
-        self.create_image_label()
-        self.create_button_frame()
-        self.create_image_navigation_frame()
-        self.create_status_bar()
-        self.bind_keyboard_shortcuts()
-
-    def create_image_label(self):
-        self.img_label = Label(self.master)
+        self.img_label = Label(master)
         self.img_label.pack()
 
-    def create_button_frame(self):
-        button_frame = Frame(self.master)
+        button_frame = Frame(master)
         button_frame.pack()
 
         Button(button_frame, text="Load Directory", command=self.open_directory).grid(row=0, column=0)
+
         self.btn_open_culled = Button(button_frame, text="Open Culled Folder", command=self.open_culled_folder, state=DISABLED)
         self.btn_open_culled.grid(row=0, column=1)
+
         Button(button_frame, text="Settings", command=self.open_settings).grid(row=0, column=2)
 
-    def create_image_navigation_frame(self):
-        frame = Frame(self.master)
+        frame = Frame(master)
         frame.pack()
 
         self.btn_prev = Button(frame, text="<- Prev", command=self.prev_image, state=DISABLED)
@@ -52,15 +41,14 @@ class PicCull:
         self.btn_next = Button(frame, text="Next ->", command=self.next_image, state=DISABLED)
         self.btn_next.grid(row=0, column=2)
 
-    def create_status_bar(self):
-        self.status_var = StringVar()
-        self.status_bar = Label(self.master, textvariable=self.status_var, bd=1, relief='sunken', anchor='w')
-        self.status_bar.pack(side='bottom', fill='x')
-
-    def bind_keyboard_shortcuts(self):
         self.master.bind('<Left>', lambda e: self.prev_image())
         self.master.bind('<Right>', lambda e: self.next_image())
         self.master.bind('<Down>', lambda e: self.cull_image())
+
+        # Status Bar
+        self.status_var = StringVar()
+        self.status_bar = Label(master, textvariable=self.status_var, bd=1, relief='sunken', anchor='w')
+        self.status_bar.pack(side='bottom', fill='x')
 
     def open_directory(self):
         self.index = 0
