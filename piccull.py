@@ -1,9 +1,10 @@
-from tkinter import Tk, Button, Frame, Label, Checkbutton, filedialog, StringVar, IntVar, DISABLED, Toplevel
+from tkinter import Checkbutton, filedialog, StringVar, IntVar, DISABLED, Toplevel
+import customtkinter as ctk
 import os
 import shutil
 import subprocess
 import platform
-from PIL import ImageTk, Image
+from PIL import Image
 
 class PicCull:
     def __init__(self, master):
@@ -16,29 +17,34 @@ class PicCull:
         self.culled_dir = None
         self.delete_on_cull = IntVar()
 
-        self.img_label = Label(master)
+        root.geometry("600x800")
+        ctk.set_default_color_theme("blue")
+
+        self.img_label = ctk.CTkLabel(master, text="No image loaded.")
         self.img_label.pack()
 
-        button_frame = Frame(master)
+        button_frame = ctk.CTkFrame(master)
         button_frame.pack()
 
-        Button(button_frame, text="Load Directory", command=self.open_directory).grid(row=0, column=0)
+        self.btn_loaddir = ctk.CTkButton(button_frame, text="Load Directory", command=self.open_directory, border_width=2)
+        self.btn_loaddir.grid(row=0, column=0)
 
-        self.btn_open_culled = Button(button_frame, text="Open Culled Folder", command=self.open_culled_folder, state=DISABLED)
+        self.btn_open_culled = ctk.CTkButton(button_frame, text="Open Culled Folder", command=self.open_culled_folder, state=DISABLED, border_width=2)
         self.btn_open_culled.grid(row=0, column=1)
 
-        Button(button_frame, text="Settings", command=self.open_settings).grid(row=0, column=2)
+        self.btn_settings = ctk.CTkButton(button_frame, text="Settings", command=self.open_settings, border_width=2)
+        self.btn_settings.grid(row=0, column=2)
 
-        frame = Frame(master)
+        frame = ctk.CTkFrame(master)
         frame.pack()
 
-        self.btn_prev = Button(frame, text="<- Prev", command=self.prev_image, state=DISABLED)
+        self.btn_prev = ctk.CTkButton(frame, text="<- Prev", command=self.prev_image, state="disabled", border_width=2)
         self.btn_prev.grid(row=0, column=0)
 
-        self.btn_cull = Button(frame, text="Cull", command=self.cull_image, state=DISABLED)
+        self.btn_cull = ctk.CTkButton(frame, text="Cull", command=self.cull_image, state="disabled", border_width=2)
         self.btn_cull.grid(row=0, column=1)
 
-        self.btn_next = Button(frame, text="Next ->", command=self.next_image, state=DISABLED)
+        self.btn_next = ctk.CTkButton(frame, text="Next ->", command=self.next_image, state="disabled", border_width=2)
         self.btn_next.grid(row=0, column=2)
 
         self.master.bind('<Left>', lambda e: self.prev_image())
@@ -47,7 +53,8 @@ class PicCull:
 
         # Status Bar
         self.status_var = StringVar()
-        self.status_bar = Label(master, textvariable=self.status_var, bd=1, relief='sunken', anchor='w')
+        # self.status_bar = Label(master, textvariable=self.status_var, bd=1, relief='sunken', anchor='w')
+        self.status_bar = ctk.CTkLabel(master, textvariable=self.status_var, anchor="center", bg_color="gray")
         self.status_bar.pack(side='bottom', fill='x')
 
     def open_directory(self):
@@ -59,7 +66,7 @@ class PicCull:
             return
 
         self.culled_dir = os.path.join(self.directory_path, 'pic-culled')
-        self.btn_open_culled.config(state='normal' if os.path.exists(self.culled_dir) else 'disabled')
+        self.btn_open_culled.configure(state='normal' if os.path.exists(self.culled_dir) else 'disabled')
 
         self.image_paths = list(filter(lambda f: f.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif')), os.listdir(self.directory_path)))
         self.image_paths = [os.path.join(self.directory_path, f) for f in self.image_paths]
@@ -98,12 +105,17 @@ class PicCull:
                 self.update_button_states()
                 return
 
-            img.thumbnail((800, 600))
-            photo = ImageTk.PhotoImage(img)
+            # Calculate the correct size to maintain aspect ratio
+            width, height = img.size
+            ratio = min(800 / width, 600 / height)
+
+            photo = ctk.CTkImage(img, size=(int(width * ratio), int(height * ratio)))
+            self.img_label.configure(image=photo, text="")
             self.img_label.configure(image=photo)
             self.img_label.image = photo
             self.status_var.set(f"Directory: {self.directory_path}. Image {self.index+1}/{len(self.image_paths)}")
         else:
+            self.img_label.configure(image=None, text="No image loaded.")
             self.img_label.configure(image=None)
             self.img_label.image = None
             self.status_var.set("No more images in the directory.")
@@ -121,7 +133,7 @@ class PicCull:
 
             del self.image_paths[self.index]
             self.update_button_states()
-            self.btn_open_culled.config(state='normal')  # The culled folder should now exist.
+            self.btn_open_culled.configure(state='normal')  # The culled folder should now exist.
             self.show_image()
 
     def prev_image(self):
@@ -138,20 +150,20 @@ class PicCull:
 
     def update_button_states(self):
         if self.index <= 0:
-            self.btn_prev.config(state='disabled')
+            self.btn_prev.configure(state='disabled')
         else:
-            self.btn_prev.config(state='normal')
+            self.btn_prev.configure(state='normal')
 
         if self.index >= len(self.image_paths) - 1:
-            self.btn_next.config(state='disabled')
+            self.btn_next.configure(state='disabled')
         else:
-            self.btn_next.config(state='normal')
+            self.btn_next.configure(state='normal')
 
         if len(self.image_paths) == 0:
-            self.btn_cull.config(state='disabled')
+            self.btn_cull.configure(state='disabled')
         else:
-            self.btn_cull.config(state='normal')
+            self.btn_cull.configure(state='normal')
 
-root = Tk()
+root = ctk.CTk()
 app = PicCull(root)
 root.mainloop()
