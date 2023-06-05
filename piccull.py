@@ -1,4 +1,4 @@
-from tkinter import Checkbutton, filedialog, StringVar, IntVar, DISABLED, Toplevel
+from tkinter import filedialog, StringVar, IntVar, DISABLED
 import customtkinter as ctk
 import os
 import shutil
