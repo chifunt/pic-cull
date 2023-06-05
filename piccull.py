@@ -1,4 +1,4 @@
-from tkinter import filedialog, StringVar, IntVar, DISABLED
+from tkinter import filedialog, StringVar, IntVar
 import customtkinter as ctk
 import os
 import shutil
@@ -30,7 +30,7 @@ class PicCull:
         self.btn_loaddir = ctk.CTkButton(button_frame, text="Load Directory", command=self.open_directory, border_width=2)
         self.btn_loaddir.grid(row=0, column=0)
 
-        self.btn_open_culled = ctk.CTkButton(button_frame, text="Open Culled Folder", command=self.open_culled_folder, state=DISABLED, border_width=2)
+        self.btn_open_culled = ctk.CTkButton(button_frame, text="Open Culled Folder", command=self.open_culled_folder, state="disabled", border_width=2)
         self.btn_open_culled.grid(row=0, column=1)
 
         self.btn_settings = ctk.CTkButton(button_frame, text="Settings", command=self.open_settings, border_width=2)
