@@ -20,7 +20,7 @@ class PicCull:
         self.culled_dir = None
         self.delete_on_cull = IntVar()
 
-         # Create widgets for displaying the image and buttons for interacting with the application
+        # Create widgets for displaying the image and buttons for interacting with the application
         self.img_label = ctk.CTkLabel(master, text="No image loaded.")
         self.img_label.pack()
 
