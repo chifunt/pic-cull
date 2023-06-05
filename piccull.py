@@ -13,12 +13,14 @@ class PicCull:
         root.geometry("600x800")
         ctk.set_default_color_theme("blue")
 
+        # Initialize variables
         self.index = 0
         self.image_paths = []
         self.directory_path = ""
         self.culled_dir = None
         self.delete_on_cull = IntVar()
 
+         # Create widgets for displaying the image and buttons for interacting with the application
         self.img_label = ctk.CTkLabel(master, text="No image loaded.")
         self.img_label.pack()
 
@@ -46,15 +48,17 @@ class PicCull:
         self.btn_next = ctk.CTkButton(frame, text="Next ->", command=self.next_image, state="disabled", border_width=2)
         self.btn_next.grid(row=0, column=2)
 
+        # Bind keyboard events to functions
         self.master.bind('<Left>', lambda e: self.prev_image())
         self.master.bind('<Right>', lambda e: self.next_image())
         self.master.bind('<Down>', lambda e: self.cull_image())
 
-        # Status Bar
+        # Create status bar at the bottom of the window
         self.status_var = StringVar()
         self.status_bar = ctk.CTkLabel(master, textvariable=self.status_var, anchor="center", bg_color="gray")
         self.status_bar.pack(side='bottom', fill='x')
 
+    # Open a directory and load all image files from it
     def open_directory(self):
         self.index = 0
         self.directory_path = filedialog.askdirectory(initialdir="/", title="Select a Directory")
@@ -76,6 +80,7 @@ class PicCull:
         self.status_var.set(f"Loaded directory: {self.directory_path}. Image {self.index+1}/{len(self.image_paths)}")
         self.show_image()
 
+    # Open the folder containing the culled images
     def open_culled_folder(self):
         if self.culled_dir and os.path.exists(self.culled_dir):
             if platform.system() == "Windows":
@@ -87,12 +92,14 @@ class PicCull:
         else:
             self.status_var.set("No culled directory exists.")
 
+    # Open a settings window
     def open_settings(self):
         settings_window = ctk.CTkToplevel(self.master)
         settings_window.title("Piccull Settings")
         detete_checkbox = ctk.CTkCheckBox(settings_window, text="Delete on cull", variable=self.delete_on_cull)
         detete_checkbox.pack()
 
+    # Display the current image
     def show_image(self):
         if self.index < len(self.image_paths):
             img_path = self.image_paths[self.index]
@@ -104,7 +111,6 @@ class PicCull:
                 self.update_button_states()
                 return
 
-            # Calculate the correct size to maintain aspect ratio
             width, height = img.size
             ratio = min(800 / width, 600 / height)
 
@@ -120,6 +126,7 @@ class PicCull:
             self.status_var.set("No more images in the directory.")
         self.update_button_states()
 
+    # Cull the current image
     def cull_image(self):
         if self.index < len(self.image_paths):
             if not os.path.exists(self.culled_dir):
@@ -132,21 +139,24 @@ class PicCull:
 
             del self.image_paths[self.index]
             self.update_button_states()
-            self.btn_open_culled.configure(state='normal')  # The culled folder should now exist.
+            self.btn_open_culled.configure(state='normal')
             self.show_image()
 
+    # Display the previous image
     def prev_image(self):
         if self.index > 0:
             self.index -= 1
             self.update_button_states()
             self.show_image()
 
+    # Display the next image
     def next_image(self):
         if self.index < len(self.image_paths) - 1:
             self.index += 1
             self.update_button_states()
             self.show_image()
 
+    # Update the state of the buttons
     def update_button_states(self):
         if self.index <= 0:
             self.btn_prev.configure(state='disabled')
@@ -163,6 +173,8 @@ class PicCull:
         else:
             self.btn_cull.configure(state='normal')
 
+# Initialize the application
 root = ctk.CTk()
 app = PicCull(root)
+# Start the application's main loop
 root.mainloop()
