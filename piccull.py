@@ -88,9 +88,10 @@ class PicCull:
             self.status_var.set("No culled directory exists.")
 
     def open_settings(self):
-        settings_window = Toplevel(self.master)
-        settings_window.title("Settings")
-        Checkbutton(settings_window, text="Delete on cull", variable=self.delete_on_cull).pack()
+        settings_window = ctk.CTkToplevel(self.master)
+        settings_window.title("Piccull Settings")
+        detete_checkbox = ctk.CTkCheckBox(settings_window, text="Delete on cull", variable=self.delete_on_cull)
+        detete_checkbox.pack()
 
     def show_image(self):
         if self.index < len(self.image_paths):
