@@ -10,15 +10,14 @@ class PicCull:
     def __init__(self, master):
         self.master = master
         self.master.title('PicCull')
+        root.geometry("600x800")
+        ctk.set_default_color_theme("blue")
 
         self.index = 0
         self.image_paths = []
         self.directory_path = ""
         self.culled_dir = None
         self.delete_on_cull = IntVar()
-
-        root.geometry("600x800")
-        ctk.set_default_color_theme("blue")
 
         self.img_label = ctk.CTkLabel(master, text="No image loaded.")
         self.img_label.pack()
