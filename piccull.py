@@ -10,8 +10,8 @@ class PicCull:
     def __init__(self, master):
         self.master = master
         self.master.title('PicCull')
-        root.geometry("600x800")
-        ctk.set_default_color_theme("blue")
+        root.geometry('600x800')
+        ctk.set_default_color_theme('blue')
 
         # Initialize variables
         self.index = 0
@@ -30,7 +30,7 @@ class PicCull:
         self.btn_loaddir = ctk.CTkButton(button_frame, text="Load Directory", command=self.open_directory, border_width=2)
         self.btn_loaddir.grid(row=0, column=0)
 
-        self.btn_open_culled = ctk.CTkButton(button_frame, text="Open Culled Folder", command=self.open_culled_folder, state="disabled", border_width=2)
+        self.btn_open_culled = ctk.CTkButton(button_frame, text="Open Culled Folder", command=self.open_culled_folder, state='disabled', border_width=2)
         self.btn_open_culled.grid(row=0, column=1)
 
         self.btn_settings = ctk.CTkButton(button_frame, text="Settings", command=self.open_settings, border_width=2)
@@ -39,13 +39,13 @@ class PicCull:
         frame = ctk.CTkFrame(master)
         frame.pack()
 
-        self.btn_prev = ctk.CTkButton(frame, text="<- Prev", command=self.prev_image, state="disabled", border_width=2)
+        self.btn_prev = ctk.CTkButton(frame, text="<- Prev", command=self.prev_image, state='disabled', border_width=2)
         self.btn_prev.grid(row=0, column=0)
 
-        self.btn_cull = ctk.CTkButton(frame, text="Cull", command=self.cull_image, state="disabled", border_width=2)
+        self.btn_cull = ctk.CTkButton(frame, text="Cull", command=self.cull_image, state='disabled', border_width=2)
         self.btn_cull.grid(row=0, column=1)
 
-        self.btn_next = ctk.CTkButton(frame, text="Next ->", command=self.next_image, state="disabled", border_width=2)
+        self.btn_next = ctk.CTkButton(frame, text="Next ->", command=self.next_image, state='disabled', border_width=2)
         self.btn_next.grid(row=0, column=2)
 
         # Bind keyboard events to functions
@@ -55,7 +55,7 @@ class PicCull:
 
         # Create status bar at the bottom of the window
         self.status_var = StringVar()
-        self.status_bar = ctk.CTkLabel(master, textvariable=self.status_var, anchor="center", bg_color="gray")
+        self.status_bar = ctk.CTkLabel(master, textvariable=self.status_var, anchor='center', bg_color='gray')
         self.status_bar.pack(side='bottom', fill='x')
 
     # Open a directory and load all image files from it
@@ -83,12 +83,12 @@ class PicCull:
     # Open the folder containing the culled images
     def open_culled_folder(self):
         if self.culled_dir and os.path.exists(self.culled_dir):
-            if platform.system() == "Windows":
+            if platform.system() == 'Windows':
                 os.startfile(self.culled_dir)
-            elif platform.system() == "Darwin":
+            elif platform.system() == 'Darwin':
                 subprocess.Popen(["open", self.culled_dir])
             else:
-                subprocess.Popen(["xdg-open", self.culled_dir])
+                subprocess.Popen(['xdg-open', self.culled_dir])
         else:
             self.status_var.set("No culled directory exists.")
 
