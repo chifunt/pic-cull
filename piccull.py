@@ -53,7 +53,6 @@ class PicCull:
 
         # Status Bar
         self.status_var = StringVar()
-        # self.status_bar = Label(master, textvariable=self.status_var, bd=1, relief='sunken', anchor='w')
         self.status_bar = ctk.CTkLabel(master, textvariable=self.status_var, anchor="center", bg_color="gray")
         self.status_bar.pack(side='bottom', fill='x')
 
