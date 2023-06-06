@@ -24,28 +24,28 @@ class PicCull:
         self.img_label = ctk.CTkLabel(master, text="No image loaded.")
         self.img_label.pack()
 
-        button_frame = ctk.CTkFrame(master)
-        button_frame.pack()
+        utilbuttons_frame = ctk.CTkFrame(master)
+        utilbuttons_frame.pack()
 
-        self.btn_loaddir = ctk.CTkButton(button_frame, text="Load Directory", command=self.open_directory, border_width=2)
+        self.btn_loaddir = ctk.CTkButton(utilbuttons_frame, text="Load Directory", command=self.open_directory, border_width=2)
         self.btn_loaddir.grid(row=0, column=0)
 
-        self.btn_open_culled = ctk.CTkButton(button_frame, text="Open Culled Folder", command=self.open_culled_folder, state='disabled', border_width=2)
+        self.btn_open_culled = ctk.CTkButton(utilbuttons_frame, text="Open Culled Folder", command=self.open_culled_folder, state='disabled', border_width=2)
         self.btn_open_culled.grid(row=0, column=1)
 
-        self.btn_settings = ctk.CTkButton(button_frame, text="Settings", command=self.open_settings, border_width=2)
+        self.btn_settings = ctk.CTkButton(utilbuttons_frame, text="Settings", command=self.open_settings, border_width=2)
         self.btn_settings.grid(row=0, column=2)
 
-        frame = ctk.CTkFrame(master)
-        frame.pack()
+        navcullbuttons_frame = ctk.CTkFrame(master)
+        navcullbuttons_frame.pack()
 
-        self.btn_prev = ctk.CTkButton(frame, text="<- Prev", command=self.prev_image, state='disabled', border_width=2)
+        self.btn_prev = ctk.CTkButton(navcullbuttons_frame, text="<- Prev", command=self.prev_image, state='disabled', border_width=2)
         self.btn_prev.grid(row=0, column=0)
 
-        self.btn_cull = ctk.CTkButton(frame, text="Cull", command=self.cull_image, state='disabled', border_width=2)
+        self.btn_cull = ctk.CTkButton(navcullbuttons_frame, text="Cull", command=self.cull_image, state='disabled', border_width=2)
         self.btn_cull.grid(row=0, column=1)
 
-        self.btn_next = ctk.CTkButton(frame, text="Next ->", command=self.next_image, state='disabled', border_width=2)
+        self.btn_next = ctk.CTkButton(navcullbuttons_frame, text="Next ->", command=self.next_image, state='disabled', border_width=2)
         self.btn_next.grid(row=0, column=2)
 
         # Bind keyboard events to functions
