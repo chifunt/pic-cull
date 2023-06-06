@@ -24,29 +24,33 @@ class PicCull:
         self.img_label = ctk.CTkLabel(master, text="No image loaded.")
         self.img_label.pack()
 
+        # Set padding for x and y axis (in pixels)
+        pad_x = 10
+        pad_y = 10
+
         utilbuttons_frame = ctk.CTkFrame(master)
         utilbuttons_frame.pack()
 
         self.btn_loaddir = ctk.CTkButton(utilbuttons_frame, text="Load Directory", command=self.open_directory, border_width=2)
-        self.btn_loaddir.grid(row=0, column=0)
+        self.btn_loaddir.grid(row=0, column=0, padx=pad_x, pady=pad_y)
 
         self.btn_open_culled = ctk.CTkButton(utilbuttons_frame, text="Open Culled Folder", command=self.open_culled_folder, state='disabled', border_width=2)
-        self.btn_open_culled.grid(row=0, column=1)
+        self.btn_open_culled.grid(row=0, column=1, padx=pad_x, pady=pad_y)
 
         self.btn_settings = ctk.CTkButton(utilbuttons_frame, text="Settings", command=self.open_settings, border_width=2)
-        self.btn_settings.grid(row=0, column=2)
+        self.btn_settings.grid(row=0, column=2, padx=pad_x, pady=pad_y)
 
         navcullbuttons_frame = ctk.CTkFrame(master)
         navcullbuttons_frame.pack()
 
         self.btn_prev = ctk.CTkButton(navcullbuttons_frame, text="<- Prev", command=self.prev_image, state='disabled', border_width=2)
-        self.btn_prev.grid(row=0, column=0)
+        self.btn_prev.grid(row=0, column=0, padx=pad_x, pady=pad_y)
 
         self.btn_cull = ctk.CTkButton(navcullbuttons_frame, text="Cull", command=self.cull_image, state='disabled', border_width=2)
-        self.btn_cull.grid(row=0, column=1)
+        self.btn_cull.grid(row=0, column=1, padx=pad_x, pady=pad_y)
 
         self.btn_next = ctk.CTkButton(navcullbuttons_frame, text="Next ->", command=self.next_image, state='disabled', border_width=2)
-        self.btn_next.grid(row=0, column=2)
+        self.btn_next.grid(row=0, column=2, padx=pad_x, pady=pad_y)
 
         # Bind keyboard events to functions
         self.master.bind('<Left>', lambda e: self.prev_image())
