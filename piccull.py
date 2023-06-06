@@ -100,8 +100,8 @@ class PicCull:
     def open_settings(self):
         settings_window = ctk.CTkToplevel(self.master)
         settings_window.title("Piccull Settings")
-        detete_checkbox = ctk.CTkCheckBox(settings_window, text="Delete on cull", variable=self.delete_on_cull)
-        detete_checkbox.pack()
+        delete_checkbox = ctk.CTkCheckBox(settings_window, text="Delete on cull", variable=self.delete_on_cull)
+        delete_checkbox.pack()
 
     # Display the current image
     def show_image(self):
