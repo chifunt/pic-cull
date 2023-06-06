@@ -46,7 +46,7 @@ class PicCull:
         self.btn_prev = ctk.CTkButton(navcullbuttons_frame, text="<- Prev", command=self.prev_image, state='disabled', border_width=2)
         self.btn_prev.grid(row=0, column=0, padx=pad_x, pady=pad_y)
 
-        self.btn_cull = ctk.CTkButton(navcullbuttons_frame, text="Cull", command=self.cull_image, state='disabled', border_width=2)
+        self.btn_cull = ctk.CTkButton(navcullbuttons_frame, text="Cull", command=self.cull_image, state='disabled', border_width=2, fg_color='red', hover_color='#8B0000')
         self.btn_cull.grid(row=0, column=1, padx=pad_x, pady=pad_y)
 
         self.btn_next = ctk.CTkButton(navcullbuttons_frame, text="Next ->", command=self.next_image, state='disabled', border_width=2)
