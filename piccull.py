@@ -11,6 +11,7 @@ class PicCull:
         self.master = master
         self.master.title('PicCull')
         root.geometry('600x800')
+        root.minsize(480, 480)
         ctk.set_default_color_theme('dark-blue')
 
         # Initialize variables
