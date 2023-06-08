@@ -113,10 +113,10 @@ class PicCull:
         settings_window.title("Piccull Settings")
 
         delete_checkbox = ctk.CTkCheckBox(settings_window, text="Delete on cull", variable=self.delete_on_cull)
-        delete_checkbox.grid(row=0, column=0, padx=pad_x, pady=pad_y)
+        delete_checkbox.grid(row=0, column=0, columnspan=2, padx=pad_x, pady=pad_y)
 
         shortcuts_label = ctk.CTkLabel(settings_window, text="Shortcuts:")
-        shortcuts_label.grid(row=1, column=0, padx=pad_x, pady=pad_y)
+        shortcuts_label.grid(row=1, column=0, columnspan=2, padx=pad_x, pady=pad_y)
 
         self.keybindings_entries.clear()
         for idx, (action, key) in enumerate(self.keybindings.items()):
