@@ -53,6 +53,14 @@ class PicCull:
         self.btn_next = ctk.CTkButton(navcullbuttons_frame, text="Next ->", command=self.next_image, state='disabled', border_width=2)
         self.btn_next.grid(row=0, column=2, padx=pad_x, pady=pad_y)
 
+        # Initialize keybindings and keybindings_entries
+        self.keybindings = {
+            "prev_image": "<Left>",
+            "next_image": "<Right>",
+            "cull_image": "<Down>"
+        }
+        self.keybindings_entries = {}
+
         # Bind keyboard events to functions
         self.master.bind('<Left>', lambda e: self.prev_image())
         self.master.bind('<Right>', lambda e: self.next_image())
@@ -99,10 +107,43 @@ class PicCull:
 
     # Open a settings window
     def open_settings(self):
+        pad_x = 10
+        pad_y = 10
         settings_window = ctk.CTkToplevel(self.master)
         settings_window.title("Piccull Settings")
+
         delete_checkbox = ctk.CTkCheckBox(settings_window, text="Delete on cull", variable=self.delete_on_cull)
-        delete_checkbox.pack()
+        delete_checkbox.grid(row=0, column=0, padx=pad_x, pady=pad_y)
+
+        shortcuts_label = ctk.CTkLabel(settings_window, text="Shortcuts:")
+        shortcuts_label.grid(row=1, column=0, padx=pad_x, pady=pad_y)
+
+        self.keybindings_entries.clear()
+        for idx, (action, key) in enumerate(self.keybindings.items()):
+            label = ctk.CTkLabel(settings_window, text=f"{action}:")
+            label.grid(row=2+idx, column=0, sticky='w', padx=pad_x, pady=pad_y)
+
+            entry = ctk.CTkEntry(settings_window)
+            entry.grid(row=2+idx, column=1, padx=pad_x, pady=pad_y)
+            entry.insert(0, key)
+
+            self.keybindings_entries[action] = entry
+
+        apply_button = ctk.CTkButton(settings_window, text="Apply", command=self.apply_settings)
+        apply_button.grid(row=2+len(self.keybindings), column=0, columnspan=2, padx=pad_x, pady=pad_y)
+
+    def apply_settings(self):
+        for action, entry in self.keybindings_entries.items():
+            self.keybindings[action] = entry.get()
+
+        # Unbind all key events
+        for action in self.keybindings:
+            self.master.unbind(self.keybindings[action])
+
+        # Re-bind the key events
+        self.master.bind(self.keybindings["prev_image"], lambda e: self.prev_image())
+        self.master.bind(self.keybindings["next_image"], lambda e: self.next_image())
+        self.master.bind(self.keybindings["cull_image"], lambda e: self.cull_image())
 
     # Display the current image
     def show_image(self):
