@@ -112,22 +112,22 @@ class PicCull:
         settings_window = ctk.CTkToplevel(self.master)
         settings_window.title("Piccull Settings")
 
-        delete_checkbox = ctk.CTkCheckBox(settings_window, text="Delete on cull", variable=self.delete_on_cull)
-        delete_checkbox.grid(row=0, column=0, columnspan=2, padx=pad_x, pady=pad_y)
-
         shortcuts_label = ctk.CTkLabel(settings_window, text="Shortcuts:")
-        shortcuts_label.grid(row=1, column=0, columnspan=2, padx=pad_x, pady=pad_y)
+        shortcuts_label.grid(row=0, column=0, columnspan=2, padx=pad_x, pady=pad_y)
 
         self.keybindings_entries.clear()
         for idx, (action, key) in enumerate(self.keybindings.items()):
             label = ctk.CTkLabel(settings_window, text=f"{action}:")
-            label.grid(row=2+idx, column=0, sticky='w', padx=pad_x, pady=pad_y)
+            label.grid(row=1+idx, column=0, sticky='w', padx=pad_x, pady=pad_y)
 
             entry = ctk.CTkEntry(settings_window)
-            entry.grid(row=2+idx, column=1, padx=pad_x, pady=pad_y)
+            entry.grid(row=1+idx, column=1, padx=pad_x, pady=pad_y)
             entry.insert(0, key)
 
             self.keybindings_entries[action] = entry
+
+        delete_checkbox = ctk.CTkCheckBox(settings_window, text="Delete on cull", variable=self.delete_on_cull)
+        delete_checkbox.grid(row=1+len(self.keybindings), column=0, columnspan=2, padx=pad_x, pady=pad_y)
 
         apply_button = ctk.CTkButton(settings_window, text="Apply", command=self.apply_settings)
         apply_button.grid(row=2+len(self.keybindings), column=0, columnspan=2, padx=pad_x, pady=pad_y)
