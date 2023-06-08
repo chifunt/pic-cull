@@ -111,6 +111,7 @@ class PicCull:
         pad_y = 10
         settings_window = ctk.CTkToplevel(self.master)
         settings_window.title("Piccull Settings")
+        settings_window.grab_set()
 
         shortcuts_label = ctk.CTkLabel(settings_window, text="Shortcuts:")
         shortcuts_label.grid(row=0, column=0, columnspan=2, padx=pad_x, pady=pad_y)
