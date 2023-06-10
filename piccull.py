@@ -1,9 +1,9 @@
 from tkinter import filedialog, StringVar, IntVar
-import customtkinter as ctk
 import os
 import shutil
 import subprocess
 import platform
+import customtkinter as ctk
 from PIL import Image
 
 class PicCull:
