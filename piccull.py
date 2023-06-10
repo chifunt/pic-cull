@@ -25,7 +25,6 @@ class PicCull:
         self.status_bar = None
 
         self.init_master(master)
-        self.init_variables()
         self.create_widgets()
         self.create_keybindings()
         self.create_status_bar()
@@ -37,13 +36,6 @@ class PicCull:
         root.minsize(480, 480)
         # root.iconbitmap('icon.ico')
         ctk.set_default_color_theme('dark-blue')
-
-    def init_variables(self):
-        self.index = 0
-        self.image_paths = []
-        self.directory_path = ""
-        self.culled_dir = None
-        self.delete_on_cull = IntVar()
 
     def create_widgets(self):
         self.create_image_label()
