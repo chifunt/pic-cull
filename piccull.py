@@ -87,27 +87,35 @@ class PicCull:
         self.status_bar = ctk.CTkLabel(self.master, textvariable=self.status_var, anchor='center', bg_color='gray')
         self.status_bar.pack(side='bottom', fill='x')
 
+    def get_directory(self):
+        directory_path = filedialog.askdirectory(initialdir="/", title="Select a Directory")
+        if not directory_path:
+            raise Exception("No directory selected.")
+        return directory_path
+
+    def load_image_paths(self, directory_path):
+        image_paths = list(filter(lambda f: f.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif')), os.listdir(directory_path)))
+        image_paths = [os.path.join(directory_path, f) for f in image_paths]
+        if not image_paths:
+            raise Exception("No images found in the selected directory.")
+        return image_paths
+
     # Open a directory and load all image files from it
     def open_directory(self):
-        self.index = 0
-        self.directory_path = filedialog.askdirectory(initialdir="/", title="Select a Directory")
+        try:
+            self.index = 0
+            self.directory_path = self.get_directory()
 
-        if not self.directory_path:
-            self.status_var.set("No directory selected.")
-            return
+            self.culled_dir = os.path.join(self.directory_path, 'pic-culled')
+            self.btn_open_culled.configure(state='normal' if os.path.exists(self.culled_dir) else 'disabled')
 
-        self.culled_dir = os.path.join(self.directory_path, 'pic-culled')
-        self.btn_open_culled.configure(state='normal' if os.path.exists(self.culled_dir) else 'disabled')
+            self.image_paths = self.load_image_paths(self.directory_path)
 
-        self.image_paths = list(filter(lambda f: f.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif')), os.listdir(self.directory_path)))
-        self.image_paths = [os.path.join(self.directory_path, f) for f in self.image_paths]
+            self.status_var.set(f"Loaded directory: {self.directory_path}. Image {self.index+1}/{len(self.image_paths)}")
+            self.show_image()
 
-        if not self.image_paths:
-            self.status_var.set("No images found in the selected directory.")
-            return
-
-        self.status_var.set(f"Loaded directory: {self.directory_path}. Image {self.index+1}/{len(self.image_paths)}")
-        self.show_image()
+        except Exception as e:
+            self.status_var.set(str(e))
 
     # Open the folder containing the culled images
     def open_culled_folder(self):
