@@ -80,7 +80,8 @@ class PicCull:
         self.keybindings = {"prev_image": "<Left>", "next_image": "<Right>", "cull_image": "<Down>"}
         self.keybindings_entries = {}
         for action in self.keybindings:
-            self.master.bind(self.keybindings[action], lambda e: getattr(self, action)())
+            self.master.bind(self.keybindings[action], lambda e, action=action: getattr(self, action)())
+
 
     def create_status_bar(self):
         self.status_var = StringVar()
