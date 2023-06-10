@@ -82,7 +82,6 @@ class PicCull:
         for action in self.keybindings:
             self.master.bind(self.keybindings[action], lambda e, action=action: getattr(self, action)())
 
-
     def create_status_bar(self):
         self.status_var = StringVar()
         self.status_bar = ctk.CTkLabel(self.master, textvariable=self.status_var, anchor='center', bg_color='gray')
