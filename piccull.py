@@ -9,67 +9,82 @@ from PIL import Image
 class PicCull:
     def __init__(self, master):
         self.master = master
+        self.index = 0
+        self.image_paths = []
+        self.directory_path = ""
+        self.culled_dir = None
+        self.delete_on_cull = IntVar()
+        self.img_label = None
+        self.btn_open_culled = None
+        self.btn_prev = None
+        self.btn_cull = None
+        self.btn_next = None
+        self.keybindings = None
+        self.keybindings_entries = None
+        self.status_var = None
+        self.status_bar = None
+
+        self.init_master(master)
+        self.init_variables()
+        self.create_widgets()
+        self.create_keybindings()
+        self.create_status_bar()
+
+    def init_master(self, master):
+        self.master = master
         self.master.title('PicCull')
         root.geometry('600x800')
         root.minsize(480, 480)
         # root.iconbitmap('icon.ico')
         ctk.set_default_color_theme('dark-blue')
 
-        # Initialize variables
+    def init_variables(self):
         self.index = 0
         self.image_paths = []
         self.directory_path = ""
         self.culled_dir = None
         self.delete_on_cull = IntVar()
 
-        # Create widgets for displaying the image and buttons for interacting with the application
-        self.img_label = ctk.CTkLabel(master, text="No image loaded.")
+    def create_widgets(self):
+        self.create_image_label()
+        self.create_util_buttons()
+        self.create_nav_cull_buttons()
+
+    def create_image_label(self):
+        self.img_label = ctk.CTkLabel(self.master, text="No image loaded.")
         self.img_label.pack()
 
-        # Set padding for x and y axis (in pixels)
-        pad_x = 10
-        pad_y = 10
+    def create_util_buttons(self):
+        utilbuttons_frame = self.create_frame(self.master)
+        self.create_button(utilbuttons_frame, "Load Directory", self.open_directory, 0)
+        self.btn_open_culled = self.create_button(utilbuttons_frame, "Open Culled Folder", self.open_culled_folder, 1, state='disabled')
+        self.create_button(utilbuttons_frame, "Settings", self.open_settings, 2)
 
-        utilbuttons_frame = ctk.CTkFrame(master)
-        utilbuttons_frame.pack()
+    def create_nav_cull_buttons(self):
+        navcullbuttons_frame = self.create_frame(self.master)
+        self.btn_prev = self.create_button(navcullbuttons_frame, "<- Prev", self.prev_image, 0, state='disabled')
+        self.btn_cull = self.create_button(navcullbuttons_frame, "Cull", self.cull_image, 1, state='disabled', fg_color='red', hover_color='#8B0000')
+        self.btn_next = self.create_button(navcullbuttons_frame, "Next ->", self.next_image, 2, state='disabled')
 
-        self.btn_loaddir = ctk.CTkButton(utilbuttons_frame, text="Load Directory", command=self.open_directory, border_width=2)
-        self.btn_loaddir.grid(row=0, column=0, padx=pad_x, pady=pad_y)
+    def create_frame(self, master):
+        frame = ctk.CTkFrame(master)
+        frame.pack()
+        return frame
 
-        self.btn_open_culled = ctk.CTkButton(utilbuttons_frame, text="Open Culled Folder", command=self.open_culled_folder, state='disabled', border_width=2)
-        self.btn_open_culled.grid(row=0, column=1, padx=pad_x, pady=pad_y)
+    def create_button(self, master, text, command, column, state='normal', **kwargs):
+        button = ctk.CTkButton(master, text=text, command=command, border_width=2, state=state, **kwargs)
+        button.grid(row=0, column=column, padx=10, pady=10)
+        return button
 
-        self.btn_settings = ctk.CTkButton(utilbuttons_frame, text="Settings", command=self.open_settings, border_width=2)
-        self.btn_settings.grid(row=0, column=2, padx=pad_x, pady=pad_y)
-
-        navcullbuttons_frame = ctk.CTkFrame(master)
-        navcullbuttons_frame.pack()
-
-        self.btn_prev = ctk.CTkButton(navcullbuttons_frame, text="<- Prev", command=self.prev_image, state='disabled', border_width=2)
-        self.btn_prev.grid(row=0, column=0, padx=pad_x, pady=pad_y)
-
-        self.btn_cull = ctk.CTkButton(navcullbuttons_frame, text="Cull", command=self.cull_image, state='disabled', border_width=2, fg_color='red', hover_color='#8B0000')
-        self.btn_cull.grid(row=0, column=1, padx=pad_x, pady=pad_y)
-
-        self.btn_next = ctk.CTkButton(navcullbuttons_frame, text="Next ->", command=self.next_image, state='disabled', border_width=2)
-        self.btn_next.grid(row=0, column=2, padx=pad_x, pady=pad_y)
-
-        # Initialize keybindings and keybindings_entries
-        self.keybindings = {
-            "prev_image": "<Left>",
-            "next_image": "<Right>",
-            "cull_image": "<Down>"
-        }
+    def create_keybindings(self):
+        self.keybindings = {"prev_image": "<Left>", "next_image": "<Right>", "cull_image": "<Down>"}
         self.keybindings_entries = {}
+        for action in self.keybindings:
+            self.master.bind(self.keybindings[action], lambda e: getattr(self, action)())
 
-        # Bind keyboard events to functions
-        self.master.bind('<Left>', lambda e: self.prev_image())
-        self.master.bind('<Right>', lambda e: self.next_image())
-        self.master.bind('<Down>', lambda e: self.cull_image())
-
-        # Create status bar at the bottom of the window
+    def create_status_bar(self):
         self.status_var = StringVar()
-        self.status_bar = ctk.CTkLabel(master, textvariable=self.status_var, anchor='center', bg_color='gray')
+        self.status_bar = ctk.CTkLabel(self.master, textvariable=self.status_var, anchor='center', bg_color='gray')
         self.status_bar.pack(side='bottom', fill='x')
 
     # Open a directory and load all image files from it
