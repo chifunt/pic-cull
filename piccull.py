@@ -8,6 +8,11 @@ from PIL import Image
 
 class PicCull:
     def __init__(self, master):
+        """
+        Initializes an instance of the PicCull application.
+
+        :param master: The root window for the application.
+        """
         self.master = master
         self.index = 0
         self.image_paths = []
@@ -30,6 +35,11 @@ class PicCull:
         self.create_status_bar()
 
     def init_master(self, master):
+        """
+        Initialize the main application window with certain attributes and configurations.
+
+        :param master: The root window for the application.
+        """
         self.master = master
         self.master.title('PicCull')
         root.geometry('600x800')
@@ -38,54 +48,100 @@ class PicCull:
         ctk.set_default_color_theme('dark-blue')
 
     def create_widgets(self):
+        """
+        Creates the main widgets of the application which include the image label and utility buttons.
+        """
         self.create_image_label()
         self.create_util_buttons()
         self.create_nav_cull_buttons()
 
     def create_image_label(self):
+        """
+        Creates a label to display the image.
+        """
         self.img_label = ctk.CTkLabel(self.master, text="No image loaded.")
         self.img_label.pack()
 
     def create_util_buttons(self):
+        """
+        Creates the utility buttons (Load Directory, Open Culled Folder, Settings) for the application.
+        """
         utilbuttons_frame = self.create_frame(self.master)
         self.create_button(utilbuttons_frame, "Load Directory", self.open_directory, 0)
         self.btn_open_culled = self.create_button(utilbuttons_frame, "Open Culled Folder", self.open_culled_folder, 1, state='disabled')
         self.create_button(utilbuttons_frame, "Settings", self.open_settings, 2)
 
     def create_nav_cull_buttons(self):
+        """
+        Creates the navigation and cull buttons (Prev, Cull, Next) for the application.
+        """
         navcullbuttons_frame = self.create_frame(self.master)
         self.btn_prev = self.create_button(navcullbuttons_frame, "<- Prev", self.prev_image, 0, state='disabled')
         self.btn_cull = self.create_button(navcullbuttons_frame, "Cull", self.cull_image, 1, state='disabled', fg_color='red', hover_color='#8B0000')
         self.btn_next = self.create_button(navcullbuttons_frame, "Next ->", self.next_image, 2, state='disabled')
 
     def create_frame(self, master):
+        """
+        Creates a new frame in the application.
+
+        :param master: The parent widget.
+        :return: The newly created frame.
+        """
         frame = ctk.CTkFrame(master)
         frame.pack()
         return frame
 
     def create_button(self, master, text, command, column, state='normal', **kwargs):
+        """
+        Creates a new button in the application.
+
+        :param master: The parent widget.
+        :param text: Text to display on the button.
+        :param command: Function to execute when the button is clicked.
+        :param column: The column where to place the button in the grid.
+        :param state: The initial state of the button. Default is 'normal'.
+        :param kwargs: Additional parameters for the button.
+        :return: The newly created button.
+        """
         button = ctk.CTkButton(master, text=text, command=command, border_width=2, state=state, **kwargs)
         button.grid(row=0, column=column, padx=10, pady=10)
         return button
 
     def create_keybindings(self):
+        """
+        Creates keybindings for certain actions in the application.
+        """
         self.keybindings = {"prev_image": "<Left>", "next_image": "<Right>", "cull_image": "<Down>"}
         self.keybindings_entries = {}
         for action in self.keybindings:
             self.master.bind(self.keybindings[action], lambda e, action=action: getattr(self, action)())
 
     def create_status_bar(self):
+        """
+        Creates a status bar at the bottom of the application window.
+        """
         self.status_var = StringVar()
         self.status_bar = ctk.CTkLabel(self.master, textvariable=self.status_var, anchor='center', bg_color='gray')
         self.status_bar.pack(side='bottom', fill='x')
 
     def get_directory(self):
+        """
+        Opens a file dialog to select a directory.
+
+        :return: The path of the selected directory.
+        """
         directory_path = filedialog.askdirectory(initialdir="/", title="Select a Directory")
         if not directory_path:
             raise Exception("No directory selected.")
         return directory_path
 
     def load_image_paths(self, directory_path):
+        """
+        Loads all image files from a given directory.
+
+        :param directory_path: The directory from which to load image files.
+        :return: List of paths to the image files.
+        """
         image_paths = list(filter(lambda f: f.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif')), os.listdir(directory_path)))
         image_paths = [os.path.join(directory_path, f) for f in image_paths]
         if not image_paths:
@@ -94,6 +150,9 @@ class PicCull:
 
     # Open a directory and load all image files from it
     def open_directory(self):
+        """
+        Opens a directory and loads all image files from it.
+        """
         try:
             self.index = 0
             self.directory_path = self.get_directory()
@@ -111,6 +170,9 @@ class PicCull:
 
     # Open the folder containing the culled images
     def open_culled_folder(self):
+        """
+        Opens the folder containing the culled images.
+        """
         if self.culled_dir and os.path.exists(self.culled_dir):
             if platform.system() == 'Windows':
                 os.startfile(self.culled_dir)
@@ -123,6 +185,9 @@ class PicCull:
 
     # Open a settings window
     def open_settings(self):
+        """
+        Opens a settings window for the application.
+        """
         pad_x = 10
         pad_y = 10
         settings_window = ctk.CTkToplevel(self.master)
@@ -150,6 +215,9 @@ class PicCull:
         apply_button.grid(row=2+len(self.keybindings), column=0, columnspan=2, padx=pad_x, pady=pad_y)
 
     def apply_settings(self):
+        """
+        Applies the changes made in the settings window.
+        """
         for action, entry in self.keybindings_entries.items():
             self.keybindings[action] = entry.get()
 
@@ -164,6 +232,9 @@ class PicCull:
 
     # Display the current image
     def show_image(self):
+        """
+        Displays the current image in the application.
+        """
         if self.index < len(self.image_paths):
             img_path = self.image_paths[self.index]
 
@@ -191,6 +262,9 @@ class PicCull:
 
     # Cull the current image
     def cull_image(self):
+        """
+        Culls the current image. The image is either deleted or moved to a 'culled' folder.
+        """
         if self.index < len(self.image_paths):
             if not os.path.exists(self.culled_dir):
                 os.makedirs(self.culled_dir)
@@ -207,6 +281,9 @@ class PicCull:
 
     # Display the previous image
     def prev_image(self):
+        """
+        Displays the previous image in the application.
+        """
         if self.index > 0:
             self.index -= 1
             self.update_button_states()
@@ -214,6 +291,9 @@ class PicCull:
 
     # Display the next image
     def next_image(self):
+        """
+        Displays the next image in the application.
+        """
         if self.index < len(self.image_paths) - 1:
             self.index += 1
             self.update_button_states()
@@ -221,6 +301,9 @@ class PicCull:
 
     # Update the state of the buttons
     def update_button_states(self):
+        """
+        Updates the state of the navigation and cull buttons based on the current image index.
+        """
         if self.index <= 0:
             self.btn_prev.configure(state='disabled')
         else:
