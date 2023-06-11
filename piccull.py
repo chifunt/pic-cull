@@ -18,6 +18,31 @@ import customtkinter as ctk
 from PIL import Image
 
 class PicCull:
+    """
+    The PicCull class encapsulates the behavior of the PicCull application.
+
+    This class is responsible for creating and managing the graphical user interface of the application,
+    including the image display, navigation buttons, utility buttons, and status bar. It also manages
+    the opening and culling of images from a selected directory, as well as the handling of user-defined
+    keybindings and settings.
+
+    Attributes:
+        master: The root window for the application.
+        index: The index of the current image.
+        image_paths: A list of paths to the images in the currently selected directory.
+        directory_path: The path to the currently selected directory.
+        culled_dir: The directory where culled images are moved.
+        delete_on_cull: A flag indicating whether to delete the images when they're culled.
+        img_label: The label for displaying images.
+        btn_open_culled: The button for opening the culled directory.
+        btn_prev: The button for navigating to the previous image.
+        btn_cull: The button for culling the current image.
+        btn_next: The button for navigating to the next image.
+        keybindings: A dictionary of keybindings for certain actions.
+        keybindings_entries: A dictionary of entries for keybindings in the settings window.
+        status_var: A string variable for the status bar.
+        status_bar: The status bar of the application.
+    """
     def __init__(self, master):
         """
         Initializes an instance of the PicCull application.
