@@ -148,7 +148,6 @@ class PicCull:
             raise Exception("No images found in the selected directory.")
         return image_paths
 
-    # Open a directory and load all image files from it
     def open_directory(self):
         """
         Opens a directory and loads all image files from it.
@@ -168,7 +167,6 @@ class PicCull:
         except Exception as e:
             self.status_var.set(str(e))
 
-    # Open the folder containing the culled images
     def open_culled_folder(self):
         """
         Opens the folder containing the culled images.
@@ -183,7 +181,6 @@ class PicCull:
         else:
             self.status_var.set("No culled directory exists.")
 
-    # Open a settings window
     def open_settings(self):
         """
         Opens a settings window for the application.
@@ -230,7 +227,6 @@ class PicCull:
         self.master.bind(self.keybindings["next_image"], lambda e: self.next_image())
         self.master.bind(self.keybindings["cull_image"], lambda e: self.cull_image())
 
-    # Display the current image
     def show_image(self):
         """
         Displays the current image in the application.
@@ -260,7 +256,6 @@ class PicCull:
             self.status_var.set("No more images in the directory.")
         self.update_button_states()
 
-    # Cull the current image
     def cull_image(self):
         """
         Culls the current image. The image is either deleted or moved to a 'culled' folder.
@@ -279,7 +274,6 @@ class PicCull:
             self.btn_open_culled.configure(state='normal')
             self.show_image()
 
-    # Display the previous image
     def prev_image(self):
         """
         Displays the previous image in the application.
@@ -289,7 +283,6 @@ class PicCull:
             self.update_button_states()
             self.show_image()
 
-    # Display the next image
     def next_image(self):
         """
         Displays the next image in the application.
@@ -299,7 +292,6 @@ class PicCull:
             self.update_button_states()
             self.show_image()
 
-    # Update the state of the buttons
     def update_button_states(self):
         """
         Updates the state of the navigation and cull buttons based on the current image index.
