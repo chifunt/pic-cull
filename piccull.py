@@ -168,7 +168,7 @@ class PicCull:
         """
         directory_path = filedialog.askdirectory(initialdir="/", title="Select a Directory")
         if not directory_path:
-            raise Exception("No directory selected.")
+            raise IOError("No directory selected.")
         return directory_path
 
     def load_image_paths(self, directory_path):
@@ -181,7 +181,7 @@ class PicCull:
         image_paths = list(filter(lambda f: f.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif')), os.listdir(directory_path)))
         image_paths = [os.path.join(directory_path, f) for f in image_paths]
         if not image_paths:
-            raise Exception("No images found in the selected directory.")
+            raise ValueError("No images found in the selected directory.")
         return image_paths
 
     def open_directory(self):
@@ -200,7 +200,7 @@ class PicCull:
             self.status_var.set(f"Loaded directory: {self.directory_path}. Image {self.index+1}/{len(self.image_paths)}")
             self.show_image()
 
-        except Exception as error:
+        except (IOError, ValueError) as error:
             self.status_var.set(str(error))
 
     def open_culled_folder(self):
