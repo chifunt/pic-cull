@@ -1,11 +1,11 @@
 """
 This module implements the PicCull application, a simple GUI tool for image culling.
 
-The PicCull application allows users to navigate through a directory of images 
-and either delete the image or move it to a separate 'culled' folder. The user can also 
+The PicCull application allows users to navigate through a directory of images
+and either delete the image or move it to a separate 'culled' folder. The user can also
 apply custom keybindings for certain actions and modify some settings.
 
-The application uses the tkinter library for the graphical user interface and 
+The application uses the tkinter library for the graphical user interface and
 the PIL (Pillow) library for image handling.
 """
 
