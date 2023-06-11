@@ -200,8 +200,8 @@ class PicCull:
             self.status_var.set(f"Loaded directory: {self.directory_path}. Image {self.index+1}/{len(self.image_paths)}")
             self.show_image()
 
-        except Exception as e:
-            self.status_var.set(str(e))
+        except Exception as error:
+            self.status_var.set(str(error))
 
     def open_culled_folder(self):
         """
