@@ -85,7 +85,8 @@ class PicCull:
 
     def create_widgets(self):
         """
-        Creates the main widgets of the application which include the image label and utility buttons.
+        Creates the main widgets of the application which include the image
+        label and utility buttons.
         """
         self.create_image_label()
         self.create_util_buttons()
@@ -100,7 +101,8 @@ class PicCull:
 
     def create_util_buttons(self):
         """
-        Creates the utility buttons (Load Directory, Open Culled Folder, Settings) for the application.
+        Creates the utility buttons (Load Directory, Open Culled Folder,
+        Settings) for the application.
         """
         utilbuttons_frame = self.create_frame(self.master)
         self.create_button(utilbuttons_frame, "Load Directory", self.open_directory, 0)
@@ -109,7 +111,8 @@ class PicCull:
 
     def create_nav_cull_buttons(self):
         """
-        Creates the navigation and cull buttons (Prev, Cull, Next) for the application.
+        Creates the navigation and cull buttons (Prev, Cull, Next) for the
+        application.
         """
         navcullbuttons_frame = self.create_frame(self.master)
         self.btn_prev = self.create_button(navcullbuttons_frame, "<- Prev", self.prev_image, 0, state='disabled')
@@ -294,7 +297,8 @@ class PicCull:
 
     def cull_image(self):
         """
-        Culls the current image. The image is either deleted or moved to a 'culled' folder.
+        Culls the current image. The image is either deleted or moved to a
+        'culled' folder.
         """
         if self.index < len(self.image_paths):
             if not os.path.exists(self.culled_dir):
@@ -330,7 +334,8 @@ class PicCull:
 
     def update_button_states(self):
         """
-        Updates the state of the navigation and cull buttons based on the current image index.
+        Updates the state of the navigation and cull buttons based on the
+        current image index.
         """
         if self.index <= 0:
             self.btn_prev.configure(state='disabled')
