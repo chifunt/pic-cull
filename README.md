@@ -11,6 +11,7 @@ PicCull is a user-friendly desktop application designed to streamline your image
 ## Prerequisites
 - Python 3.x
 - tkinter
+- customtkinter
 - PIL (Pillow)
 
 ## How to Run
