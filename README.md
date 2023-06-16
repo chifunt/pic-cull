@@ -19,7 +19,7 @@ PicCull is a user-friendly desktop application designed to streamline your image
 1. Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/Chifunt/piccull
+git clone https://github.com/Chifunt/pic-cull
 ```
 
 2. Navigate into the cloned repository:
