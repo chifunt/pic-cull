@@ -34,8 +34,6 @@ cd piccull
 python piccull.py
 ```
 
-Note: Replace "python" with "python3" if you have both Python 2.x and Python 3.x installed on your machine.
-
 ## Usage
 
 - Use the "Load Directory" button to select the directory containing the images you wish to manage.
